@@ -8,29 +8,7 @@ body {
   font-family: Arial, sans-serif;
 }
 
-.app {
-  min-height: 100vh;
-}
-
-.app-header {
-  background-color: #1f2937;
-  color: white;
-  padding: 28px 24px;
-  text-align: center;
-}
-
-.app-header h1 {
-  margin: 0;
-  font-size: 34px;
-}
-
-.app-header p {
-  margin: 8px 0 0;
-  color: #d1d5db;
-  font-size: 16px;
-}
-
-main {
+.app-contenedor {
   max-width: 1200px;
   margin: 0 auto;
 }

@@ -1,12 +1,19 @@
+import { useNavigate } from "react-router-dom";
 import "./TablaVideojuegos.css";
 
-function TablaVideojuegos({ videojuegos }) {
+function TablaVideojuegos({ videojuegos, onEliminar }) {
+  const navigate = useNavigate();
+
+  function manejarEditar(juego) {
+    navigate("/editar", { state: { videojuego: juego } });
+  }
+
   return (
     <div className="tabla-videojuegos-page">
       <div className="tabla-header">
         <div>
-          <h2>Videojuegos</h2>
-          <p>Listado de videojuegos disponibles en la tienda</p>
+          <h2>Inventario de videojuegos</h2>
+          <p>Registros disponibles en la tienda</p>
         </div>
       </div>
 
@@ -21,6 +28,7 @@ function TablaVideojuegos({ videojuegos }) {
               <th>Precio</th>
               <th>Disponible</th>
               <th>Progreso</th>
+              <th>Acciones</th>
             </tr>
           </thead>
 
@@ -35,6 +43,7 @@ function TablaVideojuegos({ videojuegos }) {
                   <td>{juego.plataforma}</td>
                   <td>{juego.lanzamiento}</td>
                   <td>${juego.precio}</td>
+
                   <td>
                     <span
                       className={
@@ -46,15 +55,29 @@ function TablaVideojuegos({ videojuegos }) {
                       {juego.disponible ? "Disponible" : "No disponible"}
                     </span>
                   </td>
+
                   <td>
                     <div className="progreso-contenedor">
-                      <progress
-                        value={juego.progreso}
-                        max={1}
-                        aria-label={`Progreso de ${juego.titulo}`}
-                      ></progress>
-
+                      <progress value={juego.progreso} max={1}></progress>
                       <span>{porcentaje}%</span>
+                    </div>
+                  </td>
+
+                  <td>
+                    <div className="acciones">
+                      <button
+                        className="btn btn-editar"
+                        onClick={() => manejarEditar(juego)}
+                      >
+                        Editar
+                      </button>
+
+                      <button
+                        className="btn btn-eliminar"
+                        onClick={() => onEliminar(juego.id)}
+                      >
+                        Eliminar
+                      </button>
                     </div>
                   </td>
                 </tr>

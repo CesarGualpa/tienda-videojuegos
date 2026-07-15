@@ -48,36 +48,6 @@ const data = [
     precio: 59.99,
     disponible: true,
     progreso: 0.75
-  },
-  {
-    id: 6,
-    titulo: "Resident Evil 4 Remake",
-    genero: "Terror",
-    plataforma: "PlayStation 5",
-    lanzamiento: 2023,
-    precio: 44.99,
-    disponible: false,
-    progreso: 0.2
-  },
-  {
-    id: 7,
-    titulo: "Cyberpunk 2077",
-    genero: "RPG",
-    plataforma: "PC",
-    lanzamiento: 2020,
-    precio: 29.99,
-    disponible: true,
-    progreso: 0.95
-  },
-  {
-    id: 8,
-    titulo: "Super Mario Odyssey",
-    genero: "Plataformas",
-    plataforma: "Nintendo Switch",
-    lanzamiento: 2017,
-    precio: 49.99,
-    disponible: true,
-    progreso: 0.5
   }
 ];
 

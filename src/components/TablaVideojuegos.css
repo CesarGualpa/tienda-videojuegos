@@ -33,7 +33,7 @@
 
 .tabla-videojuegos {
   width: 100%;
-  min-width: 950px;
+  min-width: 1050px;
   border-collapse: collapse;
 }
 
@@ -100,6 +100,39 @@
   color: #374151;
 }
 
+.acciones {
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.btn-editar {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.btn-editar:hover {
+  background-color: #bfdbfe;
+}
+
+.btn-eliminar {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.btn-eliminar:hover {
+  background-color: #fecaca;
+}
+
 @media (max-width: 768px) {
   .tabla-videojuegos-page {
     padding: 16px;
@@ -118,13 +151,21 @@
   }
 
   .tabla-videojuegos {
-    min-width: 950px;
+    min-width: 1050px;
   }
 
   .tabla-videojuegos th,
   .tabla-videojuegos td {
     padding: 12px;
     font-size: 13px;
+  }
+
+  .acciones {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
   }
 
   .progreso-contenedor {
