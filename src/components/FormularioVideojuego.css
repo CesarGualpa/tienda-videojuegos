@@ -1,55 +1,83 @@
 .formulario-page {
   width: 100%;
-  padding: 24px;
+  padding: 32px 24px;
   display: flex;
   justify-content: center;
 }
 
 .formulario-card {
   width: 100%;
-  max-width: 700px;
-  background-color: white;
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  max-width: 760px;
+  background-color: #ffffff;
+  padding: 28px;
+  border-radius: 22px;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+  border: 1px solid #e5e7eb;
 }
 
 .formulario-card h2 {
   margin: 0;
-  color: #1f2937;
-  font-size: 28px;
+  color: #111827;
+  font-size: 30px;
+  letter-spacing: -0.5px;
 }
 
 .formulario-card p {
-  margin: 8px 0 24px;
+  margin: 8px 0 26px;
   color: #6b7280;
+  line-height: 1.5;
 }
 
 .formulario-grupo {
   display: flex;
   flex-direction: column;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .formulario-grupo label {
-  margin-bottom: 6px;
+  margin-bottom: 7px;
   color: #374151;
   font-weight: bold;
   font-size: 14px;
 }
 
 .formulario-grupo input,
-.formulario-grupo select {
-  padding: 10px 12px;
+.formulario-grupo select,
+.formulario-grupo textarea {
+  width: 100%;
+  padding: 12px 14px;
   border: 1px solid #d1d5db;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 15px;
   outline: none;
+  background-color: #ffffff;
+  color: #111827;
+
+  transition: all 0.3s ease;
 }
 
 .formulario-grupo input:focus,
-.formulario-grupo select:focus {
+.formulario-grupo select:focus,
+.formulario-grupo textarea:focus {
   border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.formulario-grupo textarea {
+  min-height: 110px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.formulario-grupo textarea:focus {
+  min-height: 150px;
+}
+
+.formulario-grupo small {
+  margin-top: 6px;
+  color: #6b7280;
+  font-size: 12px;
+  align-self: flex-end;
 }
 
 .opciones-radio {
@@ -61,40 +89,82 @@
 .opciones-radio label {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
+
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background-color: #f9fafb;
+
   font-weight: normal;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.opciones-radio label:hover {
+  border-color: #2563eb;
+  background-color: #eff6ff;
 }
 
 .checkbox-grupo label {
   display: flex;
   align-items: center;
   gap: 8px;
+
+  padding: 12px 14px;
+  background-color: #f9fafb;
+  border-radius: 12px;
+
   font-weight: bold;
+  cursor: pointer;
 }
 
 .formulario-grupo input[type="checkbox"],
 .formulario-grupo input[type="radio"] {
   width: auto;
+  cursor: pointer;
 }
 
 .formulario-grupo input[type="range"] {
   padding: 0;
+  cursor: pointer;
+}
+
+.error-mensaje {
+  margin-top: 7px;
+  color: #dc2626;
+  font-size: 13px;
+  font-weight: bold;
+  animation: entradaError 0.25s ease;
+}
+
+@keyframes entradaError {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .formulario-botones {
   display: flex;
   gap: 12px;
-  margin-top: 20px;
+  margin-top: 24px;
 }
 
 .btn-guardar,
 .btn-cancelar {
   border: none;
-  padding: 10px 16px;
-  border-radius: 10px;
+  padding: 12px 18px;
+  border-radius: 12px;
   cursor: pointer;
   font-weight: bold;
   font-size: 14px;
+  transition: all 0.3s ease;
 }
 
 .btn-guardar {
@@ -104,6 +174,7 @@
 
 .btn-guardar:hover {
   background-color: #1d4ed8;
+  transform: translateY(-2px);
 }
 
 .btn-cancelar {
@@ -117,15 +188,20 @@
 
 @media (max-width: 600px) {
   .formulario-page {
-    padding: 16px;
+    padding: 18px 14px;
   }
 
   .formulario-card {
-    padding: 18px;
+    padding: 20px;
+    border-radius: 18px;
   }
 
   .formulario-card h2 {
     font-size: 24px;
+  }
+
+  .opciones-radio {
+    flex-direction: column;
   }
 
   .formulario-botones {

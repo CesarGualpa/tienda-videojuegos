@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import "./App.css";
@@ -9,17 +9,42 @@ import Navbar from "./components/Navbar";
 import TablaVideojuegos from "./components/TablaVideojuegos";
 import FormularioVideojuego from "./components/FormularioVideojuego";
 import PaginaNoEncontrada from "./components/PaginaNoEncontrada";
+import AlertaNotificacion from "./components/AlertaNotificacion";
 
 function App() {
-  const [videojuegos, setVideojuegos] = useState(data);
+  const [videojuegos, setVideojuegos] = useState(() => {
+    const datosGuardados = localStorage.getItem("lista_videojuegos");
+
+    if (datosGuardados) {
+      return JSON.parse(datosGuardados);
+    }
+
+    return data;
+  });
+
+  const [mensajeToast, setMensajeToast] = useState("");
+
+  useEffect(() => {
+    localStorage.setItem("lista_videojuegos", JSON.stringify(videojuegos));
+  }, [videojuegos]);
+
+  function mostrarToast(mensaje) {
+    setMensajeToast(mensaje);
+  }
+
+  function cerrarToast() {
+    setMensajeToast("");
+  }
 
   function agregarVideojuego(videojuegoNuevo) {
     setVideojuegos([...videojuegos, videojuegoNuevo]);
+    mostrarToast("Videojuego registrado correctamente");
   }
 
   function eliminarVideojuego(id) {
     const filtrados = videojuegos.filter((juego) => juego.id !== id);
     setVideojuegos(filtrados);
+    mostrarToast("Videojuego eliminado correctamente");
   }
 
   function editarVideojuego(videojuegoEditado) {
@@ -32,6 +57,7 @@ function App() {
     });
 
     setVideojuegos(actualizados);
+    mostrarToast("Videojuego editado correctamente");
   }
 
   function manejarGuardar(videojuego) {
@@ -47,6 +73,10 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar />
+
+      {mensajeToast && (
+        <AlertaNotificacion mensaje={mensajeToast} onCerrar={cerrarToast} />
+      )}
 
       <main className="app-contenedor">
         <Routes>

@@ -24,10 +24,12 @@ function TablaVideojuegos({ videojuegos, onEliminar }) {
               <th>Título</th>
               <th>Género</th>
               <th>Plataforma</th>
-              <th>Lanzamiento</th>
+              <th>Fecha</th>
               <th>Precio</th>
+              <th>Calificación</th>
               <th>Disponible</th>
               <th>Progreso</th>
+              <th>Sinopsis</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -41,8 +43,9 @@ function TablaVideojuegos({ videojuegos, onEliminar }) {
                   <td>{juego.titulo}</td>
                   <td>{juego.genero}</td>
                   <td>{juego.plataforma}</td>
-                  <td>{juego.lanzamiento}</td>
+                  <td>{juego.fechaLanzamiento}</td>
                   <td>${juego.precio}</td>
+                  <td>{juego.calificacion}/100</td>
 
                   <td>
                     <span
@@ -62,6 +65,8 @@ function TablaVideojuegos({ videojuegos, onEliminar }) {
                       <span>{porcentaje}%</span>
                     </div>
                   </td>
+
+                  <td className="sinopsis-celda">{juego.sinopsis}</td>
 
                   <td>
                     <div className="acciones">

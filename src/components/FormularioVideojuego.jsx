@@ -8,44 +8,138 @@ function FormularioVideojuego({ onGuardar }) {
 
   const videojuegoRecuperado = location.state?.videojuego || null;
 
+  const fechaActual = new Date().toISOString().split("T")[0];
+
   const [titulo, setTitulo] = useState("");
   const [genero, setGenero] = useState("");
   const [plataforma, setPlataforma] = useState("");
-  const [lanzamiento, setLanzamiento] = useState("");
+  const [fechaLanzamiento, setFechaLanzamiento] = useState("");
   const [precio, setPrecio] = useState("");
   const [disponible, setDisponible] = useState(false);
   const [progreso, setProgreso] = useState(0);
+  const [sinopsis, setSinopsis] = useState("");
+  const [calificacion, setCalificacion] = useState("");
+
+  const [errores, setErrores] = useState({});
+  const [formularioEnviado, setFormularioEnviado] = useState(false);
 
   useEffect(() => {
     if (videojuegoRecuperado) {
       setTitulo(videojuegoRecuperado.titulo);
       setGenero(videojuegoRecuperado.genero);
       setPlataforma(videojuegoRecuperado.plataforma);
-      setLanzamiento(videojuegoRecuperado.lanzamiento);
+      setFechaLanzamiento(videojuegoRecuperado.fechaLanzamiento);
       setPrecio(videojuegoRecuperado.precio);
       setDisponible(videojuegoRecuperado.disponible);
       setProgreso(videojuegoRecuperado.progreso * 100);
+      setSinopsis(videojuegoRecuperado.sinopsis);
+      setCalificacion(videojuegoRecuperado.calificacion);
     } else {
       setTitulo("");
       setGenero("");
       setPlataforma("");
-      setLanzamiento("");
+      setFechaLanzamiento("");
       setPrecio("");
       setDisponible(false);
       setProgreso(0);
+      setSinopsis("");
+      setCalificacion("");
     }
+
+    setErrores({});
+    setFormularioEnviado(false);
   }, [videojuegoRecuperado]);
 
-  function manejarGuardar() {
+  function validarFormulario() {
+    const erroresActivos = {};
+
+    if (titulo.trim() === "") {
+      erroresActivos.titulo = "El título del videojuego es obligatorio.";
+    } else if (titulo.trim().length < 3) {
+      erroresActivos.titulo = "El título debe tener al menos 3 caracteres.";
+    }
+
+    if (genero === "") {
+      erroresActivos.genero = "Debes seleccionar un género.";
+    }
+
+    if (plataforma === "") {
+      erroresActivos.plataforma = "Debes seleccionar una plataforma.";
+    }
+
+    if (fechaLanzamiento === "") {
+      erroresActivos.fechaLanzamiento =
+        "Debes ingresar la fecha de lanzamiento.";
+    } else if (fechaLanzamiento > fechaActual) {
+      erroresActivos.fechaLanzamiento =
+        "La fecha de lanzamiento no puede ser futura.";
+    }
+
+    if (precio === "") {
+      erroresActivos.precio = "El precio es obligatorio.";
+    } else if (Number(precio) <= 0) {
+      erroresActivos.precio = "El precio debe ser mayor a 0.";
+    }
+
+    if (sinopsis.trim() === "") {
+      erroresActivos.sinopsis = "La sinopsis es obligatoria.";
+    } else if (sinopsis.trim().length < 10) {
+      erroresActivos.sinopsis =
+        "La sinopsis debe tener al menos 10 caracteres.";
+    } else if (sinopsis.trim().length > 250) {
+      erroresActivos.sinopsis =
+        "La sinopsis no puede superar los 250 caracteres.";
+    }
+
+    if (calificacion === "") {
+      erroresActivos.calificacion = "La calificación es obligatoria.";
+    } else if (Number(calificacion) <= 1 || Number(calificacion) >= 100) {
+      erroresActivos.calificacion =
+        "La calificación debe ser mayor que 1 y menor que 100.";
+    }
+
+    return erroresActivos;
+  }
+
+  useEffect(() => {
+    if (formularioEnviado) {
+      const erroresActualizados = validarFormulario();
+      setErrores(erroresActualizados);
+    }
+  }, [
+    titulo,
+    genero,
+    plataforma,
+    fechaLanzamiento,
+    precio,
+    sinopsis,
+    calificacion,
+    formularioEnviado
+  ]);
+
+  function manejarSubmit(e) {
+    e.preventDefault();
+
+    setFormularioEnviado(true);
+
+    const erroresActivos = validarFormulario();
+
+    if (Object.keys(erroresActivos).length > 0) {
+      setErrores(erroresActivos);
+      return;
+    }
+
     const videojuego = {
       id: videojuegoRecuperado ? videojuegoRecuperado.id : Date.now(),
-      titulo: titulo,
+      titulo: titulo.trim(),
       genero: genero,
       plataforma: plataforma,
-      lanzamiento: Number(lanzamiento),
+      fechaLanzamiento: fechaLanzamiento,
       precio: Number(precio),
       disponible: disponible,
-      progreso: Number(progreso) / 100
+      progreso: Number(progreso) / 100,
+      sinopsis: sinopsis.trim(),
+      calificacion: Number(calificacion)
     };
 
     onGuardar(videojuego);
@@ -58,7 +152,7 @@ function FormularioVideojuego({ onGuardar }) {
 
   return (
     <div className="formulario-page">
-      <div className="formulario-card">
+      <form className="formulario-card" onSubmit={manejarSubmit} noValidate>
         <h2>
           {videojuegoRecuperado
             ? "Editar videojuego"
@@ -66,17 +160,21 @@ function FormularioVideojuego({ onGuardar }) {
         </h2>
 
         <p>
-          Completa los datos del videojuego para guardarlo en el inventario.
+          Completa la información del videojuego. Los campos se validan antes de
+          guardar.
         </p>
 
         <div className="formulario-grupo">
-          <label>Título</label>
+          <label>Título del videojuego</label>
           <input
             type="text"
             value={titulo}
             onChange={(e) => setTitulo(e.target.value)}
             placeholder="Ejemplo: Super Mario Odyssey"
           />
+          {errores.titulo && (
+            <span className="error-mensaje">{errores.titulo}</span>
+          )}
         </div>
 
         <div className="formulario-grupo">
@@ -92,6 +190,9 @@ function FormularioVideojuego({ onGuardar }) {
             <option value="Carreras">Carreras</option>
             <option value="Sandbox">Sandbox</option>
           </select>
+          {errores.genero && (
+            <span className="error-mensaje">{errores.genero}</span>
+          )}
         </div>
 
         <div className="formulario-grupo">
@@ -138,16 +239,23 @@ function FormularioVideojuego({ onGuardar }) {
               Nintendo Switch
             </label>
           </div>
+
+          {errores.plataforma && (
+            <span className="error-mensaje">{errores.plataforma}</span>
+          )}
         </div>
 
         <div className="formulario-grupo">
-          <label>Año de lanzamiento</label>
+          <label>Fecha de lanzamiento</label>
           <input
-            type="number"
-            value={lanzamiento}
-            onChange={(e) => setLanzamiento(e.target.value)}
-            placeholder="Ejemplo: 2023"
+            type="date"
+            value={fechaLanzamiento}
+            max={fechaActual}
+            onChange={(e) => setFechaLanzamiento(e.target.value)}
           />
+          {errores.fechaLanzamiento && (
+            <span className="error-mensaje">{errores.fechaLanzamiento}</span>
+          )}
         </div>
 
         <div className="formulario-grupo">
@@ -159,6 +267,38 @@ function FormularioVideojuego({ onGuardar }) {
             placeholder="Ejemplo: 59.99"
             step="0.01"
           />
+          {errores.precio && (
+            <span className="error-mensaje">{errores.precio}</span>
+          )}
+        </div>
+
+        <div className="formulario-grupo">
+          <label>Sinopsis / Descripción</label>
+          <textarea
+            value={sinopsis}
+            onChange={(e) => setSinopsis(e.target.value)}
+            placeholder="Escribe una reseña corta del videojuego"
+            maxLength="250"
+          ></textarea>
+
+          <small>{sinopsis.length}/250 caracteres</small>
+
+          {errores.sinopsis && (
+            <span className="error-mensaje">{errores.sinopsis}</span>
+          )}
+        </div>
+
+        <div className="formulario-grupo">
+          <label>Calificación de la crítica</label>
+          <input
+            type="number"
+            value={calificacion}
+            onChange={(e) => setCalificacion(e.target.value)}
+            placeholder="Ejemplo: 95"
+          />
+          {errores.calificacion && (
+            <span className="error-mensaje">{errores.calificacion}</span>
+          )}
         </div>
 
         <div className="formulario-grupo checkbox-grupo">
@@ -184,15 +324,19 @@ function FormularioVideojuego({ onGuardar }) {
         </div>
 
         <div className="formulario-botones">
-          <button className="btn-guardar" onClick={manejarGuardar}>
+          <button className="btn-guardar" type="submit">
             Guardar
           </button>
 
-          <button className="btn-cancelar" onClick={manejarCancelar}>
+          <button
+            className="btn-cancelar"
+            type="button"
+            onClick={manejarCancelar}
+          >
             Cancelar
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 }

@@ -1,0 +1,43 @@
+.toast-notificacion {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 1000;
+
+  background-color: rgba(22, 163, 74, 0.95);
+  color: white;
+
+  padding: 14px 20px;
+  border-radius: 14px;
+
+  box-shadow: 0 12px 28px rgba(22, 163, 74, 0.35);
+
+  animation: aparecerToast 0.3s ease;
+}
+
+.toast-notificacion p {
+  margin: 0;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+@keyframes aparecerToast {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .toast-notificacion {
+    left: 16px;
+    right: 16px;
+    top: 16px;
+    text-align: center;
+  }
+}
